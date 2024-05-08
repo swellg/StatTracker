@@ -99,7 +99,7 @@ for player_id in player_ids:
 # Print the table
 print(table)
 # Print the table to a file
-with open('table.txt', 'w') as file:
+with open('Example.txt', 'w') as file:
     file.write(str(table))
 
 # Write the updated data to the text file
