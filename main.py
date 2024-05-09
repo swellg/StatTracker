@@ -3,7 +3,7 @@ import requests
 from beautifultable import BeautifulTable
 
 # Array of player IDs
-player_ids = ["5663e0604cf84264907af2bd0c182c82","eec90030f7f842baa1d197a9e1ffd90f","fd5e414693624562a0e3cb0a2d5d1e7c","5c9a7866356c4886ada9ec9b081db07e"]
+player_ids = ["5663e0604cf84264907af2bd0c182c82","eec90030f7f842baa1d197a9e1ffd90f","fd5e414693624562a0e3cb0a2d5d1e7c","5c9a7866356c4886ada9ec9b081db07e","4a1300e1306346ccbea8145c52f3eb4d","f55086ededb048baac87c36047ab7fee","93e9b511ccde45cfaefc9c30396ca100","c058d86d080046a880b358549b7b23b0","c17544c48b744920894c20f9c873fed1"]
 
 # API setup
 base_url = "https://fortniteapi.io/v1/stats?account={}"
@@ -28,21 +28,14 @@ def fetch_player_data(player_id):
 previous_data = {}
 file_path = "data_log.csv"
 try:
-    with open(file_path, "r", newline='') as file:
-        reader = csv.reader(file)
-        header = next(reader, None)
-        if header is None:
-            print("CSV file header is missing, proceeding with an empty dataset.")
-        else:
-            for row in reader:
-                if row:
-                    mode, name, placetop1, matchesplayed = row
-                    if mode not in previous_data:
-                        previous_data[mode] = {}
-                    previous_data[mode][name] = {
-                        'placetop1': int(placetop1),
-                        'matchesplayed': int(matchesplayed)
-                    }
+    # Write the updated data to the text file with UTF-8 encoding
+    with open(file_path, "w", newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Mode", "Name", "Placetop1", "Matchesplayed"])
+        for mode in previous_data:
+            for name in previous_data[mode]:
+                stats = previous_data[mode][name]
+                writer.writerow([mode, name, stats["placetop1"], stats["matchesplayed"]])
 except FileNotFoundError:
     print("No previous data found, starting fresh.")
 
@@ -98,12 +91,12 @@ for player_id in player_ids:
 
 # Print the table
 print(table)
-# Print the table to a file
-with open('Example.txt', 'w') as file:
+# When writing the table to a file
+with open('Example.txt', 'w', encoding='utf-8') as file:
     file.write(str(table))
 
-# Write the updated data to the text file
-with open(file_path, "w", newline='') as file:
+# Write the updated data to the text file with UTF-8 encoding
+with open(file_path, "w", newline='', encoding='utf-8') as file:  # Specify encoding here
     writer = csv.writer(file)
     writer.writerow(["Mode", "Name", "Placetop1", "Matchesplayed"])
     for mode in previous_data:
